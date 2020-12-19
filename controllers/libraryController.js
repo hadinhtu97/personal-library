@@ -28,7 +28,10 @@ function LibraryController() {
 
     this.createComment = (_id, comment, callback) => {
         BookModel.findByIdAndUpdate(_id,
-            { $push: { comments: comment } },
+            {
+                $push: { comments: comment },
+                $inc: { commentcount: 1 }
+            },
             { new: true },
             (err, data) => err ? callback(err, null) : data == null ? callback(true, null) : callback(null, data)
         );
