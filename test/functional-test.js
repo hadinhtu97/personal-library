@@ -22,8 +22,8 @@ describe('Functional Tests', function () {
                         assert.equal(res.status, 200);
                         assert.equal(res.body.title, 'Clean Code');
                         assert.equal(res.body.commentcount, 0);
+                        done();
                     })
-                done();
             });
 
             it('Test POST /api/books with no title given', function (done) {
@@ -33,8 +33,8 @@ describe('Functional Tests', function () {
                     .end((err, res) => {
                         assert.equal(res.status, 200);
                         assert.equal(res.text, 'missing required field title');
+                        done();
                     })
-                done();
             });
 
         });
@@ -48,8 +48,8 @@ describe('Functional Tests', function () {
                     .end((err, res) => {
                         assert.equal(res.status, 200);
                         assert.isArray(res.body);
+                        done();
                     })
-                done();
             });
 
         });
@@ -63,8 +63,8 @@ describe('Functional Tests', function () {
                     .end((err, res) => {
                         assert.equal(res.status, 200);
                         assert.equal(res.text, 'no book exists');
+                        done();
                     })
-                done();
             });
 
             it('Test GET /api/books/[id] with valid id in db', function (done) {
@@ -74,16 +74,17 @@ describe('Functional Tests', function () {
                     .send({
                         title: 'test'
                     })
-                    .then((err, data) => {
+                    .then(data => {
                         id = data.body._id;
                         chai.request(server)
                             .get('/api/books/' + id)
                             .end((err, res) => {
                                 assert.equal(res.status, 200);
                                 assert.equal(res.body._id, id);
+                                done();
                             })
                     })
-                done();
+                    .catch(err => done(err));
             });
 
         });
@@ -97,7 +98,7 @@ describe('Functional Tests', function () {
                     .send({
                         title: 'test'
                     })
-                    .then((err, data) => {
+                    .then(data => {
                         id = data.body._id;
                         chai.request(server)
                             .post('/api/books/' + id)
@@ -108,10 +109,11 @@ describe('Functional Tests', function () {
                                 assert.equal(res.status, 200);
                                 assert.equal(res.body._id, id);
                                 assert.equal(res.body.commentcount, 1);
-                                assert.equal(res.body.comments[0], 'test comment')
+                                assert.equal(res.body.comments[0], 'test comment');
+                                done();
                             })
-                    })
-                done();
+                    }).catch(err => done(err));
+
             });
 
             it('Test POST /api/books/[id] without comment field', function (done) {
@@ -120,7 +122,7 @@ describe('Functional Tests', function () {
                     .send({
                         title: 'test'
                     })
-                    .then((err, data) => {
+                    .then(data => {
                         id = data.body._id;
                         chai.request(server)
                             .post('/api/books/' + id)
@@ -128,9 +130,9 @@ describe('Functional Tests', function () {
                             .end((err, res) => {
                                 assert.equal(res.status, 200);
                                 assert.equal(res.text, 'missing required field comment');
+                                done();
                             })
-                    })
-                done();
+                    }).catch(err => done(err));
             });
 
             it('Test POST /api/books/[id] with comment, id not in db', function (done) {
@@ -142,8 +144,8 @@ describe('Functional Tests', function () {
                     .end((err, res) => {
                         assert.equal(res.status, 200);
                         assert.equal(res.text, 'no book exists');
+                        done();
                     })
-                done();
             });
 
         });
@@ -156,16 +158,16 @@ describe('Functional Tests', function () {
                     .send({
                         title: 'test'
                     })
-                    .then((err, data) => {
+                    .then(data => {
                         id = data.body._id;
                         chai.request(server)
                             .delete('/api/books/' + id)
                             .end((err, res) => {
                                 assert.equal(res.status, 200);
                                 assert.equal(res.text, 'delete successful');
+                                done();
                             })
-                    })
-                done();
+                    }).catch(err => done(err));
             });
 
             it('Test DELETE /api/books/[id] with  id not in db', function (done) {
@@ -174,8 +176,8 @@ describe('Functional Tests', function () {
                     .end((err, res) => {
                         assert.equal(res.status, 200);
                         assert.equal(res.text, 'no book exists');
+                        done();
                     })
-                done();
             });
 
         });
