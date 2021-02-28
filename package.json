@@ -1,7 +1,7 @@
 {
   "name": "personal-library",
   "version": "1.0.0",
-  "description": "",
+  "description": "Backend APIs manage books in library",
   "main": "server.js",
   "scripts": {
     "test": "mocha",
